@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Profile | ProctorPal</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --secondary: #48cae4;
+        --success: #2ec4b6;
+        --warning: #ff9f1c;
+        --danger: #e71d36;
+        --bg-primary: #f8f9fa;
+        --text-primary: #2b2d42;
+        --text-secondary: #8d99ae;
+        --card-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+
+      nav {
+        background: var(--secondary-color);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .logo {
+        color: #fff;
+        font-size: 1.8rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 30px;
+        transition: background 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .login-btn {
+        background: var(--primary-color);
+        color: #fff;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.3s ease;
+        font-weight: bold;
+      }
+
+      .login-btn:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: #fff;
+        margin: 2px 0;
+        transition: 0.4s;
+      }
+
+      .container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section {
+        margin-bottom: 4rem;
+        background: #fff;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 2rem;
+        transition: transform 0.3s ease;
+      }
+
+      .section:hover {
+        transform: translateY(-5px);
+      }
+
+      .section-title {
+        font-size: 2rem;
+        color: var(--text-color);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .profile-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("/api/placeholder/1200/300") center/cover;
+        opacity: 0.1;
+      }
+
+      .profile-header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: var(--card-shadow);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+      }
+
+      .profile-info h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .profile-info p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        cursor: pointer;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--text-primary);
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .chart-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+      }
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .chart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .credit-score {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .score-circle {
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        border: 16px solid #eef1f8;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        background: white;
+        transition: var(--transition);
+        box-shadow: inset 0 0 25px rgba(67, 97, 238, 0.1);
+      }
+
+      .score-circle::before {
+        content: "";
+        position: absolute;
+        top: -16px;
+        left: -16px;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        border: 16px solid;
+        border-color: var(--primary) var(--primary) transparent transparent;
+        transform: rotate(-45deg);
+        animation: fillScore 1.5s ease-out forwards;
+      }
+
+      .score-circle::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 190px;
+        height: 190px;
+        background: linear-gradient(135deg, #ffffff, #f8f9ff);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 4px 20px rgba(67, 97, 238, 0.12),
+          inset 0 2px 10px rgba(255, 255, 255, 0.8);
+      }
+
+      .score-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-text-fill-color: transparent;
+        z-index: 1;
+        animation: fadeScale 1s ease-out;
+      }
+
+      .score-value::after {
+        content: "%";
+        font-size: 2rem;
+        margin-left: 4px;
+        opacity: 0.7;
+      }
+
+      @keyframes fillScore {
+        0% {
+          transform: rotate(-45deg);
+          border-color: var(--primary) transparent transparent transparent;
+        }
+        100% {
+          transform: rotate(225deg);
+          border-color: var(--primary) var(--primary) transparent transparent;
+        }
+      }
+
+      @keyframes fadeScale {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">ProctorPal</div>
+      <div class="nav-links">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="#guide"><i class="fas fa-book"></i> Platform Guide</a>
+        <a href="#exams"><i class="fas fa-file-alt"></i> Tests</a>
+        <a href="#tickets"><i class="fas fa-ticket-alt"></i> Tickets</a>
+      </div>
+    </nav>
+
+    <div class="profile-header">
+      <div class="profile-header-content animate-fade-in">
+        <div class="profile-avatar">👨‍🎓</div>
+        <div class="profile-info">
+          <h1>John Doe</h1>
+          <p>Student ID: STU2024001</p>
+          <p>Computer Science Department</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="stats-grid animate-slide-up">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div
+              class="stat-icon"
+              style="background: rgba(67, 97, 238, 0.1); color: var(--primary)"
+            >
+              📚
+            </div>
+            <div>
+              <div class="stat-value">28</div>
+              <div class="stat-label">Total Exams</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div
+              class="stat-icon"
+              style="background: rgba(46, 196, 182, 0.1); color: var(--success)"
+            >
+              🏆
+            </div>
+            <div>
+              <div class="stat-value">95%</div>
+              <div class="stat-label">Highest Score</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div
+              class="stat-icon"
+              style="background: rgba(255, 159, 28, 0.1); color: var(--warning)"
+            >
+              ⭐
+            </div>
+            <div>
+              <div class="stat-value">85</div>
+              <div class="stat-label">Faith Score</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div
+              class="stat-icon"
+              style="background: rgba(231, 29, 54, 0.1); color: var(--danger)"
+            >
+              ⏱️
+            </div>
+            <div>
+              <div class="stat-value">45</div>
+              <div class="stat-label">Avg. Minutes per Exam</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-grid animate-slide-up">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Upcoming Exams</div>
+          </div>
+          <div class="upcoming-exams">
+            <div class="exam-item">
+              <div class="exam-date">
+                <div style="font-size: 1.2rem">Mar 15</div>
+                <div style="font-size: 0.8rem; opacity: 0.9">2024</div>
+              </div>
+              <div class="exam-details">
+                <h3>Data Structures</h3>
+                <p>
+                  <span>⏱️ Duration: 2 hours</span>
+                  <span>•</span>
+                  <span>🏛️ Room: Lab 201</span>
+                </p>
+              </div>
+              <div class="exam-status">Scheduled</div>
+            </div>
+            <div class="exam-item">
+              <div class="exam-date">Mar 18</div>
+              <div class="exam-details">
+                <h3>Database Management</h3>
+                <p>Duration: 1.5 hours • Room: Lab 102</p>
+              </div>
+              <div class="exam-status">Scheduled</div>
+            </div>
+            <div class="exam-item">
+              <div class="exam-date">Mar 22</div>
+              <div class="exam-details">
+                <h3>Computer Networks</h3>
+                <p>Duration: 2 hours • Room: Lab 305</p>
+              </div>
+              <div class="exam-status">Scheduled</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="credit-score">
+            <div class="score-circle">
+              <div class="score-value">55</div>
+            </div>
+            <div class="score-label">Student Faith Score</div>
+            <div class="score-rating">Excellent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="monitoring hidden" id="monitoringSection">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="output" class="d-none"></canvas>
+        <p id="status">Initializing...</p>
+    </div>
+
+    <script>
+      // Add intersection observer for animations
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = 1;
+              entry.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document
+        .querySelectorAll(".animate-slide-up")
+        .forEach((el) => observer.observe(el));
+
+      // Add hover animations for stat cards
+      document.querySelectorAll(".stat-card").forEach((card) => {
+        card.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-10px)";
+        });
+
+        card.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0)";
+        });
+      });
+    </script>
+    <script src="monitoring.js"></script>
+  </body>
+</html>
